@@ -2,11 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:newsapp/models/artical_model.dart';
-import 'package:newsapp/services/data.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-
-import '../models/category_model.dart';
-import '../models/slider_model.dart';
 import '../services/news.dart';
 import 'news_detail.dart';
 
