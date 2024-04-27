@@ -9,6 +9,7 @@ import '../models/category_model.dart';
 import '../models/slider_model.dart';
 import '../services/news.dart';
 import '../services/slider_data.dart';
+import 'news_detail.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -197,9 +198,9 @@ class _HomeScreenState extends State<HomeScreen> {
                           itemCount: articles.length,
                           itemBuilder: (context, index) {
                             return BlogTile(
-                                desc: articles[index].description!,
-                                imageUrl: articles[index].urlToImage!,
-                                title: articles[index].title!);
+                                desc: articles[index].description ?? "",
+                                imageUrl: articles[index].urlToImage?? "",
+                                title: articles[index].title?? "");
                           }),
                     )
                   ],
@@ -280,13 +281,27 @@ class CategoryTile extends StatelessWidget {
 }
 
 class BlogTile extends StatelessWidget {
-  String imageUrl, title, desc;
-  BlogTile({required this.desc, required this.imageUrl, required this.title});
+  final String imageUrl;
+  final String title;
+  final String desc;
+
+  BlogTile({required this.imageUrl, required this.title, required this.desc});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {},
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => NewsDetailPage(
+              title: title,
+              description: desc,
+              imageUrl: imageUrl,
+            ),
+          ),
+        );
+      },
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10),
         child: Material(
@@ -299,29 +314,44 @@ class BlogTile extends StatelessWidget {
               children: [
                 Container(
                   child: ClipRRect(
-                      borderRadius: BorderRadius.circular(10),
-                      child: CachedNetworkImage(imageUrl : imageUrl,
-                          height: 120, width: 120, fit: BoxFit.cover)),
+                    borderRadius: BorderRadius.circular(10),
+                    child: CachedNetworkImage(
+                      imageUrl: imageUrl ?? "",
+                      placeholder: (context, url) =>
+                      const CircularProgressIndicator(),
+                      errorWidget: (context, url, error) =>
+                      const Icon(Icons.error),
+                      height: 120,
+                      width: 120,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
                 ),
                 SizedBox(width: 8),
                 Column(
                   children: [
                     Container(
                       width: MediaQuery.of(context).size.width / 1.7,
-                      child: Text(title,
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.w500,
-                              fontSize: 17)),
+                      child: Text(
+                        title ?? "",
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 17,
+                        ),
+                      ),
                     ),
                     SizedBox(height: 7),
                     Container(
                       width: MediaQuery.of(context).size.width / 1.7,
-                      child: Text(desc,
-                          style: TextStyle(
-                              color: Colors.black54,
-                              fontWeight: FontWeight.w500,
-                              fontSize: 15)),
+                      child: Text(
+                        desc ?? "",
+                        style: TextStyle(
+                          color: Colors.black54,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 15,
+                        ),
+                      ),
                     ),
                   ],
                 ),
@@ -333,3 +363,4 @@ class BlogTile extends StatelessWidget {
     );
   }
 }
+
