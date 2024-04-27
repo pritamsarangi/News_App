@@ -7,7 +7,7 @@ import '../models/artical_model.dart';
 class News{
   List<ArticleModel> news =[];
   Future<void> getNews(String catagory)async{
-    String url = "https://newsapi.org/v2/everything?q=$catagory&apiKey=20334f48ecdc4a8a913313e3a0385c92";
+    String url = "https://newsapi.org/v2/everything?q=$catagory&apiKey=1b61de8cbfa54c8b90904468aaa78d6e";
     var response = await http.get(Uri.parse(url));
 
     var jsonData = jsonDecode(response.body);
