@@ -151,7 +151,39 @@ class _HomeScreenState extends State<HomeScreen> {
                           child: Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
+                              Container(
+                                child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(10),
+                                    child: Image.asset('images/science.jpg',
+                                        height: 120,
+                                        width: 120,
+                                        fit: BoxFit.cover)),
+                              ),
                               SizedBox(width: 8),
+                              Column(
+                                children: [
+                                  Container(
+                                    width:
+                                        MediaQuery.of(context).size.width / 1.7,
+                                    child: Text('Title',
+                                        style: TextStyle(
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 17)),
+                                  ),
+                                  SizedBox(height: 7),
+                                  Container(
+                                    width:
+                                        MediaQuery.of(context).size.width / 1.7,
+                                    child: Text(
+                                        'then a final kick to beat lemard kamana',
+                                        style: TextStyle(
+                                            color: Colors.black54,
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 15)),
+                                  ),
+                                ],
+                              ),
                             ],
                           ),
                         ),
