@@ -8,7 +8,6 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import '../models/category_model.dart';
 import '../models/slider_model.dart';
 import '../services/news.dart';
-import '../services/slider_data.dart';
 import 'news_detail.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -19,29 +18,24 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  List<CategoryModel> categories = [];
-  List<sliderModel> sliders = [];
   List<ArticleModel> articles = [];
   bool _loading = true;
   int activeIndex = 0;
 
   @override
   void initState() {
+    getNews("trending");
     super.initState();
-    categories = getCategories();
-    sliders = getSliders();
-    getNews();
   }
 
-  getNews() async {
+  getNews(String category) async {
     News newsclass = News();
-    await newsclass.getNews();
-    articles = newsclass.news;
+    await newsclass.getNews(category); // Call getNews with the provided category
     setState(() {
+      articles = newsclass.news;
       _loading = false;
     });
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -65,47 +59,33 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Container(
-                      margin: EdgeInsets.only(left: 10.0),
-                      height: 70,
-                      child: ListView.builder(
-                          physics: BouncingScrollPhysics(),
-                          shrinkWrap: true,
-                          scrollDirection: Axis.horizontal,
-                          itemCount: categories.length,
-                          itemBuilder: (context, index) {
-                            return CategoryTile(
-                                image: categories[index].image,
-                                categoryName: categories[index].categoryName);
-                          }),
-                    ),
-                    SizedBox(height: 30),
                     Padding(
-                      padding: const EdgeInsets.only(left: 10, right: 10),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text('Breaking News!',
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 18)),
-                          Text('View All',
-                              style: TextStyle(
-                                  color: Colors.blue,
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 16)),
-                        ],
+                      padding: const EdgeInsets.all(5.0),
+                      child: TextField(
+                        decoration: InputDecoration(
+                          labelText: 'Search',
+                          hintText: 'Search News...',
+                          prefixIcon: Icon(Icons.search),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(25.0)),
+                          ),
+                        ),
+                        onChanged: (text) {
+                          setState(() {
+                            getNews(text);
+                          });
+                        },
                       ),
                     ),
+
                     SizedBox(
                       height: 30,
                     ),
                     CarouselSlider.builder(
-                      itemCount: sliders.length,
+                      itemCount: 5,
                       itemBuilder: (context, index, realIndex) {
-                        String? res = sliders[index].image;
-                        String? res1 = sliders[index].name;
+                        String? res = articles[index].urlToImage?? "";
+                        String? res1 = articles[index].title?? "";
                         return buildImage(res!, index, res1!);
                       },
                       options: CarouselOptions(
@@ -132,11 +112,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                   color: Colors.black,
                                   fontWeight: FontWeight.bold,
                                   fontSize: 18)),
-                          Text('View All',
-                              style: TextStyle(
-                                  color: Colors.blue,
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 16)),
                         ],
                       ),
                     ),
@@ -148,45 +123,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         borderRadius: BorderRadius.circular(10),
                         child: Padding(
                           padding: const EdgeInsets.symmetric(
-                              vertical: 10, horizontal: 5),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(10),
-                                    child: Image.asset('images/science.jpg',
-                                        height: 120,
-                                        width: 120,
-                                        fit: BoxFit.cover)),
-                              ),
-                              SizedBox(width: 8),
-                              Column(
-                                children: [
-                                  Container(
-                                    width:
-                                        MediaQuery.of(context).size.width / 1.7,
-                                    child: Text('Title',
-                                        style: TextStyle(
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.w500,
-                                            fontSize: 17)),
-                                  ),
-                                  SizedBox(height: 7),
-                                  Container(
-                                    width:
-                                        MediaQuery.of(context).size.width / 1.7,
-                                    child: Text(
-                                        'then a final kick to beat lemard kamana',
-                                        style: TextStyle(
-                                            color: Colors.black54,
-                                            fontWeight: FontWeight.w500,
-                                            fontSize: 15)),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
+                              vertical: 0, horizontal: 5),
+
                         ),
                       ),
                     ),
@@ -197,10 +135,13 @@ class _HomeScreenState extends State<HomeScreen> {
                           physics: ClampingScrollPhysics(),
                           itemCount: articles.length,
                           itemBuilder: (context, index) {
-                            return BlogTile(
-                                desc: articles[index].description ?? "",
-                                imageUrl: articles[index].urlToImage?? "",
-                                title: articles[index].title?? "");
+                            return Padding(
+                              padding: const EdgeInsets.all(2.0),
+                              child: BlogTile(
+                                  desc: articles[index].description ?? "",
+                                  imageUrl: articles[index].urlToImage?? "",
+                                  title: articles[index].title?? ""),
+                            );
                           }),
                     )
                   ],
@@ -215,7 +156,7 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Stack(children: [
           ClipRRect(
             borderRadius: BorderRadius.circular(10),
-            child: Image.asset(image,
+            child: Image.network(image,
                 height: 250,
                 fit: BoxFit.cover,
                 width: MediaQuery.of(context).size.width),
@@ -244,7 +185,7 @@ class _HomeScreenState extends State<HomeScreen> {
       );
   Widget buildIndicator() => AnimatedSmoothIndicator(
       activeIndex: activeIndex,
-      count: sliders.length,
+      count: 5,
       effect: SlideEffect(
           dotWidth: 15, dotHeight: 15, activeDotColor: Colors.blue));
 }

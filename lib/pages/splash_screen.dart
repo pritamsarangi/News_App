@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:newsapp/main.dart';
 
+import 'home_screen.dart';
+
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -15,12 +17,17 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    Timer(Duration(seconds: 5), () {
+    Timer(Duration(seconds: 4), () {
       Navigator.pushReplacement(context,
           MaterialPageRoute(
-            builder: (context) => MyApp(),
+            builder: (context) => HomeScreen(),
           ));
     });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   @override

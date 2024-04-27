@@ -19,19 +19,28 @@ class NewsDetailPage extends StatelessWidget {
       ),
       body: SingleChildScrollView(
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Image.network(imageUrl),
+            Image.network(
+              imageUrl,
+              height: 200, // Adjust height as needed
+              fit: BoxFit.cover,
+            ),
             Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(16.0),
               child: Text(
                 title,
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                style: Theme.of(context).textTheme.headline5!.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
             Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(description),
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: Text(
+                description,
+                style: Theme.of(context).textTheme.bodyText1,
+              ),
             ),
           ],
         ),
