@@ -40,7 +40,7 @@ class _HomeScreenState extends State<HomeScreen> {
         elevation: 0.0,
         title: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
           Text(
-            "Spectrum",
+            "Spec",
             style: TextStyle(color: Colors.black),
           ),
           Text(" News",

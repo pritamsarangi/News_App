@@ -30,7 +30,7 @@ class NewsDetailPage extends StatelessWidget {
               padding: const EdgeInsets.all(16.0),
               child: Text(
                 title,
-                style: Theme.of(context).textTheme.headline5!.copyWith(
+                style: Theme.of(context).textTheme.headlineSmall!.copyWith(
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -39,7 +39,7 @@ class NewsDetailPage extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: Text(
                 description,
-                style: Theme.of(context).textTheme.bodyText1,
+                style: Theme.of(context).textTheme.bodyLarge,
               ),
             ),
           ],
